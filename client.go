@@ -18,9 +18,9 @@ type Client struct {
 }
 
 type RequestOptions struct {
-	method   string
-	function string
-	data     url.Values
+	Method   string
+	Function string
+	Data     url.Values
 }
 
 func (c Client) Request(o RequestOptions) (*http.Response, error) {
@@ -28,23 +28,23 @@ func (c Client) Request(o RequestOptions) (*http.Response, error) {
 
 	u := c.wwwroot + webService
 
-	data := o.data
+	data := o.Data
 	data.Add("wstoken", c.token)
-	data.Add("wsfunction", o.function)
+	data.Add("wsfunction", o.Function)
 	data.Add("moodlewsrestformat", "json")
 
 	var body strings.Reader
 
-	if o.method == "GET" {
+	if o.Method == "GET" {
 		u = u + "?" + data.Encode()
 		data = nil
 	}
 
-	if o.method == "POST" {
+	if o.Method == "POST" {
 		body = *strings.NewReader(data.Encode())
 	}
 
-	req, err := http.NewRequest(o.method, u, &body)
+	req, err := http.NewRequest(o.Method, u, &body)
 	if err != nil {
 		return nil, err
 	}
